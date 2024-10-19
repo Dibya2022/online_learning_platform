@@ -10,8 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, IndianRupee, User, Calendar } from "lucide-react";
 import { server } from "@/main";
+import { UserData } from "@/context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const CourseCard = ({ course }) => {
+  const navigate = useNavigate();
+  const { user, isAuth } = UserData();
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <CardHeader className="p-0">
@@ -53,9 +57,48 @@ const CourseCard = ({ course }) => {
           <IndianRupee className="w-6 h-6 mr-1" />
           {course.price}
         </div>
-        <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-          Enroll Now
-        </Button>
+        {isAuth ? (
+          <>
+            {user && user.role !== "admin" ? (
+              <>
+                {user.subscription.includes(course._id) ? (
+                  <Button
+                    onClick={() => navigate(`/course/study/${course._id}`)}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    Study
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => navigate(`/course/${course._id}`)}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    Get Started
+                  </Button>
+                )}
+              </>
+            ) : (
+              <Button
+                onClick={() => navigate(`/course/study/${course._id}`)}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                Study
+              </Button>
+            )}
+          </>
+        ) : (
+          <Button
+            onClick={() => navigate("/login")}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            Enroll Now
+          </Button>
+        )}
+        {user && user.role === "admin" && (
+          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+            Delete
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

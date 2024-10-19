@@ -17,7 +17,7 @@ import { Switch } from "@/components/ui/switch";
 import { User, Mail, Lock, Bell, BookOpen, LogOut } from "lucide-react";
 import { UserData } from "@/context/UserContext";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Account = ({ user }) => {
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -133,10 +133,12 @@ const Account = ({ user }) => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button>
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      View Learning Dashboard
-                    </Button>
+                    <Link to="/courses">
+                      <Button>
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        View Learning Dashboard
+                      </Button>
+                    </Link>
                   </CardFooter>
                 </TabsContent>
               </Tabs>

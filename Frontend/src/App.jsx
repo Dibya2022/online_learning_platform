@@ -11,6 +11,7 @@ import Account from "./pages/Account/Account";
 import { UserData } from "./context/UserContext";
 import Loading from "./components/Loading/Loading";
 import Courses from "./pages/Courses/Courses";
+import CourseDescription from "./pages/CourseDescription/CourseDescription";
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -35,6 +36,10 @@ const App = () => {
               element={isAuth ? <Home /> : <Register />}
             />
             <Route path="/verify" element={isAuth ? <Home /> : <Verify />} />
+            <Route
+              path="/course/:id"
+              element={isAuth ? <CourseDescription user={user} /> : <Login />}
+            />
           </Routes>
           <Footer />
         </BrowserRouter>
