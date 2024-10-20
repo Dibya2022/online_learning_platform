@@ -12,6 +12,10 @@ import { UserData } from "./context/UserContext";
 import Loading from "./components/Loading/Loading";
 import Courses from "./pages/Courses/Courses";
 import CourseDescription from "./pages/CourseDescription/CourseDescription";
+import PaymentSucess from "./pages/PaymentSucess/PaymentSucess";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import CourseStudy from "./pages/CourseStudy/CourseStudy";
+import Lecture from "./pages/Lecture/Lecture";
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -39,6 +43,26 @@ const App = () => {
             <Route
               path="/course/:id"
               element={isAuth ? <CourseDescription user={user} /> : <Login />}
+            />
+            <Route
+              path="/payment-sucess/:id"
+              element={isAuth ? <PaymentSucess user={user} /> : <Login />}
+            />
+            <Route
+              path="/:id/dashboard"
+              element={isAuth ? <Dashboard user={user} /> : <Login />}
+            />
+            <Route
+              path="/course/study/:id"
+              element={isAuth ? <CourseStudy user={user} /> : <Login />}
+            />
+            {/* <Route
+              path="/course/study/:id"
+              element={isAuth ? <CourseStudy user={user} /> : <Login />}
+            /> */}
+            <Route
+              path="/lecture/:id"
+              element={isAuth ? <Lecture user={user} /> : <Login />}
             />
           </Routes>
           <Footer />

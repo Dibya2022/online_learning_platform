@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Github, Twitter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "@/context/UserContext";
+import { courseData } from "@/context/CourseContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,9 +24,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   // const [rememberMe, setRememberMe] = useState(false);
 
+  const { fetchMyCourse } = courseData();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await loginUser(email, password, navigate);
+    await loginUser(email, password, navigate, fetchMyCourse);
     // console.log("Login submitted", { email, password, rememberMe });
   };
 
