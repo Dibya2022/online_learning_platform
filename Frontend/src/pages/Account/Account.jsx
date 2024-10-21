@@ -14,7 +14,15 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { User, Mail, Lock, Bell, BookOpen, LogOut } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  Bell,
+  BookOpen,
+  LogOut,
+  AppWindowMacIcon,
+} from "lucide-react";
 import { UserData } from "@/context/UserContext";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -138,6 +146,15 @@ const Account = ({ user }) => {
                       <BookOpen className="mr-2 h-4 w-4" />
                       View Learning Dashboard
                     </Button>
+                    {user.role === "admin" && (
+                      <Button
+                        className="ml-4"
+                        onClick={() => navigate(`/admin/dashboard`)}
+                      >
+                        <AppWindowMacIcon className="mr-2 h-4 w-4" />
+                        View Admin Dashboard
+                      </Button>
+                    )}
                   </CardFooter>
                 </TabsContent>
               </Tabs>

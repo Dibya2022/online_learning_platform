@@ -12,10 +12,30 @@ import { Clock, IndianRupee, User, Calendar } from "lucide-react";
 import { server } from "@/main";
 import { UserData } from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { courseData } from "@/context/CourseContext";
 
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const { user, isAuth } = UserData();
+  const { fetchCourses } = courseData();
+
+  const deletHandler = async (id) => {
+    if (confirm("Are you sure you want to delete this course")) {
+      try {
+        const { data } = await axios.delete(`${server}/api/course/${id}`, {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        });
+        toast.success(data.message);
+        fetchCourses();
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    }
+  };
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <CardHeader className="p-0">
@@ -95,7 +115,10 @@ const CourseCard = ({ course }) => {
           </Button>
         )}
         {user && user.role === "admin" && (
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button
+            onClick={() => deletHandler(course._id)}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
             Delete
           </Button>
         )}

@@ -14,6 +14,7 @@ import { Clock, User, BookOpen, BookOpenText } from "lucide-react";
 
 const CourseStudy = ({ user }) => {
   const params = useParams();
+  console.log(params);
   const { fetchCourse, course } = courseData();
   const navigate = useNavigate();
   if (user && user.role !== "admin" && !user.subscription.includes(params.id))
