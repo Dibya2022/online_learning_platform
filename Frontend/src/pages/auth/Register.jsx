@@ -104,7 +104,7 @@ const Register = () => {
               </Button>
             </div>
           </form>
-          <div className="relative my-4">
+          {/* <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
@@ -123,7 +123,7 @@ const Register = () => {
               <Twitter className="mr-2 h-4 w-4" />
               Twitter
             </Button>
-          </div>
+          </div> */}
         </CardContent>
         <CardFooter className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-gray-500">Already have an account?</div>

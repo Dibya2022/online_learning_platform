@@ -130,7 +130,10 @@ const AdminDashboard = ({ user }) => {
                   >
                     Add New Course
                   </button>
-                  <button className="w-full px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-md hover:bg-primary/20">
+                  <button
+                    onClick={() => navigate(`/admin/users`)}
+                    className="w-full px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-md hover:bg-primary/20"
+                  >
                     View All Users
                   </button>
                   {/* <button className="w-full px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-md hover:bg-primary/20">
