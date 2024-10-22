@@ -95,6 +95,10 @@ const Lecture = ({ user }) => {
       );
       toast.success(data.message);
       fetchLectures();
+      setTitle("");
+      setDescription("");
+      setVideo("");
+      setPreviewUrl("");
       setBtnLoading(false);
       setShow(false);
     } catch (error) {
