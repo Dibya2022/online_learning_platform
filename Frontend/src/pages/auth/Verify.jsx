@@ -13,12 +13,14 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "@/context/UserContext";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Verify = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const { btnLoading, verifOtp } = UserData();
   const [timer, setTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   // Timer logic for OTP resend
@@ -66,6 +68,11 @@ const Verify = () => {
     }
   };
 
+  function onChange(value) {
+    console.log("Captcha value:", value);
+    setShow(true);
+  }
+
   // Resend OTP logic
   const handleResend = () => {
     console.log("Resending OTP");
@@ -107,9 +114,16 @@ const Verify = () => {
                   ))}
                 </div>
               </div>
-              <Button disabled={btnLoading} type="submit" className="w-full">
-                {btnLoading ? "Please Wait.." : "Verify Email"}
-              </Button>
+              <ReCAPTCHA
+                className="ml-12"
+                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                onChange={onChange}
+              />
+              {show && (
+                <Button disabled={btnLoading} type="submit" className="w-full">
+                  {btnLoading ? "Please Wait.." : "Verify Email"}
+                </Button>
+              )}
             </div>
           </form>
           <div className="mt-4 text-center">

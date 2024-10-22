@@ -20,6 +20,7 @@ import AdminDashboard from "./admin/Dashboard/AdminDashboard";
 import AdminCourses from "./admin/Courses/AdminCourses";
 import AddCourse from "./AddCourse/AddCourse";
 import AdminUser from "./admin/Users/AdminUser";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -44,6 +45,10 @@ const App = () => {
               element={isAuth ? <Home /> : <Register />}
             />
             <Route path="/verify" element={isAuth ? <Home /> : <Verify />} />
+            <Route
+              path="/forgot"
+              element={isAuth ? <Home /> : <ForgotPassword />}
+            />
             <Route
               path="/course/:id"
               element={isAuth ? <CourseDescription user={user} /> : <Login />}
