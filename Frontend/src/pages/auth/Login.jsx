@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,117 +9,116 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Eye, EyeOff } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Github, Twitter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "@/context/UserContext";
 import { courseData } from "@/context/CourseContext";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { btnLoading, loginUser } = UserData();
+  const { btnLoading, loginUser, handleGoogleLoginSuccess } = UserData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [rememberMe, setRememberMe] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const { fetchMyCourse } = courseData();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await loginUser(email, password, navigate, fetchMyCourse);
-    // console.log("Login submitted", { email, password, rememberMe });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Login
-          </CardTitle>
-          <CardDescription className="text-center">
-            Enter your email and password to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+    <GoogleOAuthProvider clientId="51593237379-ocano7gu6rid4qsq97oems91ph0tinj0.apps.googleusercontent.com">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">
+              Login
+            </CardTitle>
+            <CardDescription className="text-center">
+              Enter your email and password to login to your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="m@example.com"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2 relative">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-7 h-8 w-8"
+                    onClick={togglePasswordVisibility}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-gray-500" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-gray-500" />
+                    )}
+                  </Button>
+                </div>
+                <Button type="submit" disabled={btnLoading} className="w-full">
+                  {btnLoading ? "Please Wait..." : "Login"}
+                </Button>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {/* <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="remember"
-                  checked={rememberMe}
-                  onCheckedChange={(checked) => setRememberMe(!!checked)}
-                />
-                <label
-                  htmlFor="remember"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Remember me
-                </label>
-              </div> */}
-              <Button type="submit" disabled={btnLoading} className="w-full">
-                {btnLoading ? "Please Wait..." : "Login"}
-              </Button>
+            </form>
+
+            {/* Google Login Button */}
+            <div className="mt-4">
+              <GoogleLogin
+                onSuccess={(credentialResponse) =>
+                  handleGoogleLoginSuccess(credentialResponse, navigate)
+                }
+                onError={() => console.log("Google Login Failed")}
+              />
             </div>
-          </form>
-          <div className="mt-4 text-center">
-            <a href="#" className="text-sm text-blue-600 hover:underline">
-              <Link to="/forgot"> Forgot password?</Link>
-            </a>
-          </div>
-          {/* <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+
+            <div className="mt-4 text-center">
+              <Link
+                to="/forgot"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Button variant="outline" className="w-full">
-              <Github className="mr-2 h-4 w-4" />
-              Github
+          </CardContent>
+          <CardFooter className="flex flex-wrap items-center justify-between gap-2">
+            <div className="text-sm text-gray-500">Don't have an account?</div>
+            <Button variant="link" className="p-0 text-sm">
+              <Link to="/register">Create an account</Link>
             </Button>
-            <Button variant="outline" className="w-full">
-              <Twitter className="mr-2 h-4 w-4" />
-              Twitter
-            </Button>
-          </div> */}
-        </CardContent>
-        <CardFooter className="flex flex-wrap items-center justify-between gap-2">
-          <div className="text-sm text-gray-500">
-            Don&apos;t have an account?
-          </div>
-          <Button variant="link" className="p-0 text-sm">
-            <Link to="/register"> Create an account</Link>
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+          </CardFooter>
+        </Card>
+      </div>
+    </GoogleOAuthProvider>
   );
 };
 

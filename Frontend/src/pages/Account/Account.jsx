@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,29 +8,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import {
-  User,
-  Mail,
-  Lock,
-  Bell,
-  BookOpen,
-  LogOut,
-  AppWindowMacIcon,
-} from "lucide-react";
+import { LogOut, BookOpen, AppWindowMacIcon } from "lucide-react";
 import { UserData } from "@/context/UserContext";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { server } from "@/main";
+import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
 
 const Account = ({ user }) => {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const { setIsAuth, setUser } = UserData();
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.clear();
     setIsAuth(false);
@@ -39,6 +29,7 @@ const Account = ({ user }) => {
     toast.success("Logged Out Successfully");
     navigate("/login");
   };
+
   return (
     <div>
       {user && (
@@ -70,53 +61,10 @@ const Account = ({ user }) => {
               </CardFooter>
             </Card>
             <Card className="md:col-span-2">
-              <Tabs defaultValue="account">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="account">Account</TabsTrigger>
+              <Tabs defaultValue="preferences">
+                <TabsList className="grid w-full grid-cols-1">
                   <TabsTrigger value="preferences">Preferences</TabsTrigger>
                 </TabsList>
-                <TabsContent value="account">
-                  <CardHeader>
-                    <CardTitle>Account Information</CardTitle>
-                    <CardDescription>
-                      Update your account details here
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
-                      <div className="flex">
-                        <User className="w-4 h-4 mr-2 mt-3 text-muted-foreground" />
-                        <Input id="name" defaultValue="John Doe" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="flex">
-                        <Mail className="w-4 h-4 mr-2 mt-3 text-muted-foreground" />
-                        <Input
-                          id="email"
-                          type="email"
-                          defaultValue="john.doe@example.com"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <div className="flex">
-                        <Lock className="w-4 h-4 mr-2 mt-3 text-muted-foreground" />
-                        <Input
-                          id="password"
-                          type="password"
-                          defaultValue="********"
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button>Save Changes</Button>
-                  </CardFooter>
-                </TabsContent>
                 <TabsContent value="preferences">
                   <CardHeader>
                     <CardTitle>Preferences</CardTitle>

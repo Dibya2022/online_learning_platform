@@ -5,8 +5,8 @@ import "./index.css";
 import { UserContextProvider } from "./context/UserContext.jsx";
 import { CourseContextProvider } from "./context/CourseContext.jsx";
 
-export const server = "https://online-learning-platform-dx25.onrender.com";
-//"http://localhost:5000"
+export const server = "http://localhost:5000";
+//https://online-learning-platform-dx25.onrender.com"
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

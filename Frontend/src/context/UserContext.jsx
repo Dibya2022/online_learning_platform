@@ -60,7 +60,7 @@ export const UserContextProvider = ({ children }) => {
       });
       toast.success(data.message);
       navigate("/login");
-      localStorage.clear("activationToken");
+      localStorage.removeItem("activationToken");
       setBtnLoading(false);
     } catch (error) {
       setBtnLoading(false);
@@ -84,6 +84,34 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
+  // Google Login Success Handler
+  async function handleGoogleLoginSuccess(credentialResponse, navigate) {
+    console.log("Google Login Successful:", credentialResponse);
+    const { credential } = credentialResponse;
+
+    try {
+      const { data } = await axios.post(
+        `${server}/api/user/google-login`,
+        { idToken: credential },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Set user data and authentication state
+      toast.success(data.message);
+      localStorage.setItem("token", data.token);
+      setUser(data.user);
+      setIsAuth(true);
+      navigate("/");
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+      toast.error(error.response.data.message);
+    }
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -101,6 +129,7 @@ export const UserContextProvider = ({ children }) => {
         registerUser,
         verifOtp,
         fetchUser,
+        handleGoogleLoginSuccess, // Expose Google login handler to use it in components
       }}
     >
       {children}

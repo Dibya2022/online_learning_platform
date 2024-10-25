@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendMail, { sendForgotMail } from "../middlewares/sendMail.js";
 import tryCatch from "../middlewares/tryCatch.js";
+import { OAuth2Client } from "google-auth-library";
 
 export const register = tryCatch(async (req, res) => {
   const { email, password, name } = req.body;
@@ -155,4 +156,42 @@ export const resetPassword = tryCatch(async (req, res) => {
   user.resetPasswordExpire = null;
   await user.save();
   res.json({ message: "Password reset success" });
+});
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Add your Google Client ID
+
+// ... other functions remain unchanged
+
+export const googleLogin = tryCatch(async (req, res) => {
+  const { idToken } = req.body;
+
+  // Verify the token with Google
+  const ticket = await client.verifyIdToken({
+    idToken,
+    audience: process.env.GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+  });
+  const payload = ticket.getPayload();
+  const { email, name } = payload;
+
+  // Check if the user already exists
+  let user = await User.findOne({ email });
+  if (!user) {
+    // If user does not exist, create a new one
+    user = await User.create({
+      name,
+      email,
+      password: "GOOGLE_AUTH", // Placeholder password, not used for Google login
+    });
+  }
+
+  // Create a JWT token
+  const token = jwt.sign({ _id: user._id }, process.env.jwt_Sec, {
+    expiresIn: "7d",
+  });
+
+  res.json({
+    message: `Welcome back ${user.name}`,
+    token,
+    user,
+  });
 });

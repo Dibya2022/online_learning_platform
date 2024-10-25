@@ -11,8 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Github, Twitter } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "@/context/UserContext";
 
@@ -20,15 +19,18 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // const [agreeTerms, setAgreeTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const { btnLoading, registerUser } = UserData();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await registerUser(name, email, password, navigate);
-    // console.log("Login submitted", { email, password, rememberMe });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -66,64 +68,37 @@ const Register = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              {/* Wrap password field and icon in relative container */}
+              <div className="space-y-2 relative">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-              </div>
-              {/* <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <Input
-                  id="confirm-password"
-                  type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div> */}
-              {/* <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="terms"
-                  checked={agreeTerms}
-                  onCheckedChange={(checked) => setAgreeTerms(!!checked)}
-                />
-                <label
-                  htmlFor="terms"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                {/* Adjust button position for eye icon */}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-7 h-8 w-8"
+                  onClick={togglePasswordVisibility}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  I agree to the terms and conditions
-                </label>
-              </div> */}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-500" />
+                  )}
+                </Button>
+              </div>
               <Button type="submit" disabled={btnLoading} className="w-full">
                 {btnLoading ? "Please Wait..." : "Create Account"}
               </Button>
             </div>
           </form>
-          {/* <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Button variant="outline" className="w-full">
-              <Github className="mr-2 h-4 w-4" />
-              Github
-            </Button>
-            <Button variant="outline" className="w-full">
-              <Twitter className="mr-2 h-4 w-4" />
-              Twitter
-            </Button>
-          </div> */}
         </CardContent>
         <CardFooter className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-gray-500">Already have an account?</div>

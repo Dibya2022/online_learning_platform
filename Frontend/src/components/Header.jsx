@@ -5,7 +5,7 @@ import { BookOpen } from "lucide-react";
 const Header = ({ isAuth }) => {
   return (
     <div className="flex flex-col">
-      <header className="px-4 lg:px-6 h-14 flex items-center justify-between">
+      <header className="px-4 lg:px-6 h-14 flex bg-gray-100 items-center justify-between">
         <Link to="/">
           <div className="flex items-center">
             <BookOpen className="h-8 w-8 text-blue-600" />
